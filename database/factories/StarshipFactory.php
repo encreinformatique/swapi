@@ -29,7 +29,8 @@ final class StarshipFactory extends Factory implements SwapiFactoryInterface
             'id' => $pKey,
             'name' => $data['name'] ?? '',
             'model' => $data['model'] ?? '',
-            'edited' => substr($data['edited'], 0, 19),
+            // Si no tenemos fecha, no ha sido modificado en Swapi.
+            'edited' => substr($data['edited'] ?? date('Y-m-d-Y-H-i-s'), 0, 19),
         ]);
     }
 }

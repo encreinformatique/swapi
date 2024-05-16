@@ -11,6 +11,27 @@ Route::get('/starships/{id}', 'App\Http\Controllers\Api\Starships\DetailControll
 Route::get('/vehicles/{id}', 'App\Http\Controllers\Api\Vehicles\DetailController')
     ->where('id', '\d+')
     ->name('api.vehicles.detail');
+/*
+ * Rutas para editar
+ */
+Route::patch('/starships/{id}', 'App\Http\Controllers\Api\Starships\EditController')
+    ->where('id', '\d+')
+    ->name('api.starships.edit');
+Route::patch('/vehicles/{id}', 'App\Http\Controllers\Api\Vehicles\EditController')
+    ->where('id', '\d+')
+    ->name('api.vehicles.edit');
+Route::patch('/starships/{id}/increment', 'App\Http\Controllers\Api\Starships\EditController@increment')
+    ->where('id', '\d+')
+    ->name('api.starships.increment');
+Route::patch('/vehicles/{id}/increment', 'App\Http\Controllers\Api\Vehicles\EditController@increment')
+    ->where('id', '\d+')
+    ->name('api.vehicles.increment');
+Route::patch('/starships/{id}/decrement', 'App\Http\Controllers\Api\Starships\EditController@decrement')
+    ->where('id', '\d+')
+    ->name('api.starships.increment');
+Route::patch('/vehicles/{id}/decrement', 'App\Http\Controllers\Api\Vehicles\EditController@decrement')
+    ->where('id', '\d+')
+    ->name('api.vehicles.increment');
 
 /*
  * Otras rutas de la API.

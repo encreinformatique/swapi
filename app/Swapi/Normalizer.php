@@ -10,9 +10,6 @@
 
 namespace App\Swapi;
 
-use App\Models\Starship;
-use App\Models\Vehicle;
-
 final class Normalizer implements NormalizerInterface
 {
     protected const RESULT_WOOKIE = 'rcwochuanaoc';
@@ -20,10 +17,8 @@ final class Normalizer implements NormalizerInterface
     protected string $endpointSlug = '';
     protected string $model = '';
 
-    public function getEndpointSlug(): string
-    {
-        return $this->endpointSlug;
-    }
+    public function __construct(private DtoInterface $dto)
+    {}
 
     public function getModel(): string
     {
@@ -32,8 +27,8 @@ final class Normalizer implements NormalizerInterface
 
     public function setModel(string $model): self
     {
-        $this->model = $model;
-        if (\in_array($model, [Starship::class, Vehicle::class])) {
+        if (\in_array($model, Dto::ACCEPTED_MODELS)) {
+            $this->model = $model;
             $this->endpointSlug = $model::ENDPOINT_SLUG;
         }
         return $this;
@@ -50,7 +45,7 @@ final class Normalizer implements NormalizerInterface
          * Solo queremos uno de estos modelos.
          * Y de paso queremos el indice results.
          */
-        if (!\in_array($this->getModel(), [Starship::class, Vehicle::class]) || empty($content)) {
+        if (!\in_array($this->getModel(), Dto::ACCEPTED_MODELS) || empty($content)) {
             return $content;
         }
 
@@ -73,33 +68,16 @@ final class Normalizer implements NormalizerInterface
 
     public function normalizeRow(array $row): array
     {
-        /*
-         * No existe un campo ik o pk para la primary key. Podríamos usar la Url, siendo única.
-         * Sacamos el Id de dicha url. Ojo con el slash opcional a final de la Url.
-         */
-        preg_match('`/' . $this->getEndpointSlug() . '/(\d+)([/]{0,1})$`', $row['url'] ?? '', $matches);
+        $pKey = $this->dto->extractKeyFromUrl($row['url'] ?? '');
 
         // No pudimos obtener la primary key, dejemos pasar para al menos no romper los resultados.
-        if (count($matches) < 2) {
+        if (!$pKey) {
             return $row;
         }
 
-        $pKey = (int)$matches[1];
+        $entity = $this->dto->findOrCreate($pKey, $row, $this->getModel());
 
-        // Check if in database
-        $entity = $this->getModel()::find($pKey);
-
-        // Podríamos comparar las fechas de edición si alojaríamos los datos en la BBDD.
-        // $dt = \DateTime::createFromFormat('Y-m-d\TH:i:s.uZ', $row['edited']);
-
-        // Save in database otherwise
-        if (!$entity) {
-            $factory = $this->getModel()::factory();
-            $entity = $factory->createFromSwapi($row, $pKey);
-            $entity->save();
-        }
-
-        $row['count'] = $entity?->count ?? 0;
+        $row['count'] = $entity->count ?? 0;
 
         return $row;
     }
