@@ -13,7 +13,11 @@ namespace App\Http\Controllers\Api\Starships;
 use App\Http\Controllers\Api\Controller;
 use App\Models\Starship;
 use Illuminate\Http\JsonResponse;
+use OpenApi\Attributes as Swg;
 
+#[Swg\Get('/starships/{id}', responses: [
+    new Swg\Response(response: 200, description: 'Detail of a Starship')
+])]
 final class DetailController extends Controller
 {
     public function __invoke(int $id): JsonResponse

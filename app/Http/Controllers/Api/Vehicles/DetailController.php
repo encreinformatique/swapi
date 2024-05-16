@@ -13,7 +13,11 @@ namespace App\Http\Controllers\Api\Vehicles;
 use App\Http\Controllers\Api\Controller;
 use App\Models\Vehicle;
 use Illuminate\Http\JsonResponse;
+use OpenApi\Attributes as Swg;
 
+#[Swg\Get('/vehicles/{id}', responses: [
+    new Swg\Response(response: 200, description: 'Detail of a Vehicle')
+])]
 final class DetailController extends Controller
 {
     public function __invoke(int $id): JsonResponse

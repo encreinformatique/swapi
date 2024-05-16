@@ -4,7 +4,7 @@ Usando los datos de [swapi.dev](https://swapi.dev)
 
 ## Instrucciones de instalación
 
-Se requiere Docker para instalar la aplicaciones con las
+Se requiere Docker para instalar la aplicación con las
 siguientes instrucciones.
 
 1. Instalación
@@ -20,6 +20,8 @@ En el terminal o desde un IDE como PHPStorm
 3. Lanzar la suite de tests
 
 `./vendor/bin/sail artisan test`
+
+La documentación de la Api es disponible en [http://localhost/api/documentation](http://localhost/api/documentation)
 
 ### Otras instrucciones
 
