@@ -73,16 +73,6 @@ abstract class AbstractEditController extends Controller
         return response()->json($swItem, $statusCode);
     }
 
-    public function increment(int $id): JsonResponse
-    {
-        return $this->changeCountOn(self::ACTION_INCREMENT, $id);
-    }
-
-    public function decrement(int $id): JsonResponse
-    {
-        return $this->changeCountOn(self::ACTION_DECREMENT, $id);
-    }
-
     /**
      * @param string $action
      * @param int $id

@@ -12,7 +12,11 @@ namespace App\Http\Controllers\Api\Starships;
 
 use App\Http\Controllers\Api\AbstractListController;
 use App\Models\Starship;
+use OpenApi\Attributes as Swg;
 
+#[Swg\Get('/starships', responses: [
+    new Swg\Response(response: 200, description: 'List of Starships')
+])]
 final class ListController extends AbstractListController
 {
     protected const MODEL = Starship::class;

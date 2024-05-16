@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SwapiClientInterface::class, fn () => new SwapiClient());
         $this->app->bind(SwapiDtoInterface::class, fn () => new SwapiDto());
         $this->app->bind(SwapiNormalizerInterface::class, fn (Application $app) => new SwapiNormalizer($app[SwapiDtoInterface::class]));
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
     }
 
     /**

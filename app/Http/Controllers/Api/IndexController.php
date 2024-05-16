@@ -11,7 +11,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use OpenApi\Attributes as Swg;
 
+#[Swg\Info('1.0.0', 'Api Wrapper for Swapi', title: "Swapi")]
+#[Swg\Get('/', description: 'The endpoint allows to list the available routes of lists of the Api.', responses: [
+    new Swg\Response(response: 200, description: 'Available lists')
+])]
 final class IndexController extends Controller
 {
     public function __invoke(): array
