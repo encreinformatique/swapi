@@ -128,7 +128,7 @@ abstract class AbstractEditController extends Controller
     protected function computeNumberFromRequest(Request $request): ?int
     {
         $newData = json_decode($request->getContent(), true);
-        if (!\array_key_exists(self::KEY_NUMBER_INVENTORY, $newData) ||
+        if (!\array_key_exists(self::KEY_NUMBER_INVENTORY, $newData ?? []) ||
             !\is_int($newData[self::KEY_NUMBER_INVENTORY])
         ) {
             return null;
