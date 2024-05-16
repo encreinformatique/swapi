@@ -1,0 +1,15 @@
+name: Assign Pull Request
+
+on:
+  pull_request:
+    types: ['opened']
+
+jobs:
+  assign:
+    name: Assign to Author
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign Pull Request to its author
+        uses: kentaro-m/auto-assign-action@v1.1.1
+        with:
+          configuration-path: '.github/config/assign_pr.yaml'

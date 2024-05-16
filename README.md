@@ -7,22 +7,17 @@ Usando los datos de [swapi.dev](https://swapi.dev)
 Se requiere Docker para instalar la aplicaciones con las
 siguientes instrucciones.
 
-1. Iniciar the Docker containers.
+1. Instalación
 
-`./vendor/bin/sail up -d`
+En el terminal o desde un IDE como PHPStorm
 
-La opción `-d` es opcional. Sirve para lanzar el container en 
-tarea de fondo.
+`make install`
 
-2. preparar/actualizar la base de datos
-
-` ./vendor/bin/sail artisan migrate`
-
-3. acceder al aplicación
+2. acceder al aplicación
 
 `http://localhost/`
 
-4. Lanzar la suite de tests
+3. Lanzar la suite de tests
 
 `./vendor/bin/sail artisan test`
 
