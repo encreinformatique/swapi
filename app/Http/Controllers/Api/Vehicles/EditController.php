@@ -34,22 +34,36 @@ final class EditController extends AbstractEditController
         return parent::__invoke($id, $request);
     }
 
-    #[Swg\Patch('/vehicles/{id}/increment', responses: [
+    #[Swg\Patch('/vehicles/{id}/increment',
+        description: 'Increase with the number received in the request. In case of no payload, default number is 1.',
+        requestBody: new Swg\RequestBody(description: 'Json with the number of Vehicles to increase', required: false, content: new Swg\JsonContent([
+            new Swg\Examples('{"count": 15}', '15 Vehicles in the inventory.', value: '{"count": 15}')
+        ])),
+        responses: [
         new Swg\Response(response: 200, description: 'Inventory modified'),
         new Swg\Response(response: 404, description: 'Object could not be found'),
     ])]
-    public function increment(int $id): JsonResponse
+    public function increment(int $id, Request $request): JsonResponse
     {
-        return $this->changeCountOn(self::ACTION_INCREMENT, $id);
+        $number = $this->computeNumberFromRequest($request);
+
+        return $this->changeCountOn(self::ACTION_INCREMENT, $id, $number ?? 1);
     }
 
-    #[Swg\Patch('/vehicles/{id}/decrement', responses: [
+    #[Swg\Patch('/vehicles/{id}/decrement',
+        description: 'Decrease with the number received in the request. In case of no payload, default number is 1.',
+        requestBody: new Swg\RequestBody(description: 'Json with the number of Vehicles to decrease', required: false, content: new Swg\JsonContent([
+            new Swg\Examples('{"count": 15}', '15 Vehicles in the inventory.', value: '{"count": 15}')
+        ])),
+        responses: [
         new Swg\Response(response: 200, description: 'Inventory modified'),
         new Swg\Response(response: 404, description: 'Object could not be found'),
     ])]
-    public function decrement(int $id): JsonResponse
+    public function decrement(int $id, Request $request): JsonResponse
     {
-        return $this->changeCountOn(self::ACTION_DECREMENT, $id);
+        $number = $this->computeNumberFromRequest($request);
+
+        return $this->changeCountOn(self::ACTION_DECREMENT, $id, $number ?? 1);
     }
 
     protected function getModel(): string

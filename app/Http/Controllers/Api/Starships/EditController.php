@@ -35,22 +35,38 @@ final class EditController extends AbstractEditController
         return parent::__invoke($id, $request);
     }
 
-    #[Swg\Patch('/starships/{id}/increment', responses: [
-        new Swg\Response(response: 200, description: 'Inventory modified'),
-        new Swg\Response(response: 404, description: 'Object could not be found'),
-    ])]
-    public function increment(int $id): JsonResponse
+    #[Swg\Patch('/starships/{id}/increment',
+        description: 'Increase with the number received in the request. In case of no payload, default number is 1.',
+        requestBody: new Swg\RequestBody(description: 'Json with the number of Vehicles to increase', required: false, content: new Swg\JsonContent([
+            new Swg\Examples('{"count": 15}', '15 Starships to add to the inventory.', value: '{"count": 15}')
+        ])),
+        responses: [
+            new Swg\Response(response: 200, description: 'Inventory modified'),
+            new Swg\Response(response: 404, description: 'Object could not be found'),
+        ]
+    )]
+    public function increment(int $id, Request $request): JsonResponse
     {
-        return $this->changeCountOn(self::ACTION_INCREMENT, $id);
+        $number = $this->computeNumberFromRequest($request);
+
+        return $this->changeCountOn(self::ACTION_INCREMENT, $id, $number ?? 1);
     }
 
-    #[Swg\Patch('/starships/{id}/decrement', responses: [
-        new Swg\Response(response: 200, description: 'Inventory modified'),
-        new Swg\Response(response: 404, description: 'Object could not be found'),
-    ])]
-    public function decrement(int $id): JsonResponse
+    #[Swg\Patch('/starships/{id}/decrement',
+        description: 'Decrease with the number received in the request. In case of no payload, default number is 1.',
+        requestBody: new Swg\RequestBody(description: 'Json with the number of Vehicles to decrease', required: false, content: new Swg\JsonContent([
+            new Swg\Examples('{"count": 15}', '15 Starships to remove from inventory.', value: '{"count": 15}')
+        ])),
+        responses: [
+            new Swg\Response(response: 200, description: 'Inventory modified'),
+            new Swg\Response(response: 404, description: 'Object could not be found'),
+        ]
+    )]
+    public function decrement(int $id, Request $request): JsonResponse
     {
-        return $this->changeCountOn(self::ACTION_DECREMENT, $id);
+        $number = $this->computeNumberFromRequest($request);
+
+        return $this->changeCountOn(self::ACTION_DECREMENT, $id, $number ?? 1);
     }
 
     protected function getModel(): string
